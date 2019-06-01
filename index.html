@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <style>
+            canvas{
+                display:block;
+                margin:100 auto;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas width="300" height="300" id="clock"></canvas>
+    </body>
+    <script>
+        init();
+        function init(){
+            let canvas = document.querySelector("#clock");
+            let ctx = canvas.getContext("2d");
+            setInterval(function(){
+                ctx.clearRect(0,0,300,300);
+                clockOut(ctx);
+                pointerInt(ctx);
+            },1000)
+            
+        };
+        function clockOut(ctx){
+            let PI2 = Math.PI;
+            ctx.save();
+            ctx.translate(150,150);
+            ctx.beginPath();
+            ctx.arc(0, 0, 148, 0, 2 * PI2);
+            ctx.stroke();
+            ctx.closePath();
+            for(var i=0;i<60;i++){
+                ctx.rotate( PI2 / 30);
+                ctx.strokeStyle = (i+1)%5?"#000":"#ff0000";
+                ctx.lineWidth = (i+1)%5?"1":"2";
+                ctx.beginPath();
+                ctx.moveTo(110,0);
+                ctx.lineTo(140,0);
+                ctx.stroke();
+                ctx.closePath();
+            };
+            ctx.restore();
+        };
+        function pointerInt(ctx){
+            var oDate = new Date();
+            var sPoint = oDate.getSeconds();
+            var mPoint = oDate.getMinutes()+sPoint/60;
+            var hPoint = oDate.getHours()+mPoint/24+sPoint/60;
+            console.log("sPoint",sPoint);
+            pointeClock(ctx,sPoint-15,140,"#000");
+            pointeClock(ctx,mPoint-15,120,"#ff0");
+            pointeClock(ctx,hPoint-15,100,"#ff0000");
+        }
+        function pointeClock(ctx,angle,length,color){
+            let PI2 = Math.PI;
+            ctx.save();
+            ctx.translate(150,150);
+            ctx.rotate(angle*PI2/30);
+            ctx.strokeStyle=color;
+            ctx.beginPath();
+            ctx.moveTo(0,0);
+            ctx.lineTo(length,0);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+        }
+    </script>
+</html>
